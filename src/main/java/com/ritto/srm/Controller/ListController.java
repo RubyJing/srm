@@ -87,8 +87,11 @@ public class ListController {
      */
     @PostMapping("/addsynctab")
     public String addSyncTab(SyncBean sb){
-        syncRepository.save(sb);
-        return "";
+        String result = "success";
+        if (null != syncRepository.save(sb)){
+            result = "fail";
+        }
+        return result;
     }
 
 }
