@@ -1,8 +1,10 @@
 package com.ritto.srm.Controller;
 
 import com.ritto.srm.Entity.CpuBean;
+import com.ritto.srm.Entity.SyncBean;
 import com.ritto.srm.Entity2.CpuBeanBack;
 import com.ritto.srm.Util.ObjectConvertor;
+import com.ritto.srm.service.jpa.SyncRepository;
 import com.ritto.srm.service.jpa.cpuRepository;
 import com.ritto.srm.service.jpa2.cpuRepository2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class ListController {
     EntityManager entityManager;
 
     @Autowired
+    private SyncRepository syncRepository;
+
+    @Autowired
     private cpuRepository cpuRepository;
 
     @Autowired
@@ -50,10 +55,19 @@ public class ListController {
         return "";
     }
 
-    @PostMapping("/pgg")
-    public String postgg(String s){
+    /**
+     * @Auther: Eiden J.P Zhou
+     * @Date: 2018/7/17 17:35
+     * @Method: findallsync
+     * @Params: []
+     * @Return: java.util.List<com.ritto.srm.Entity.SyncBean>
+     * @Description: 查找全部同步计划
+     */
+    @PostMapping("/findallsync")
+    public List<SyncBean> findallsync(){
 
-        return s;
+        List<SyncBean> syncBeanList = syncRepository.findAll();
+        return syncBeanList;
     }
 
     @PostMapping("/findalltab")
@@ -62,4 +76,19 @@ public class ListController {
         List tablelist = entityManager.createNativeQuery("select table_name from information_schema.tables where table_schema='Hotel_manage'").getResultList();
         return tablelist;
     }
+
+    /**
+     * @Auther: Eiden J.P Zhou
+     * @Date: 2018/7/17 17:22
+     * @Method: addSyncTab
+     * @Params: [sb]
+     * @Return: java.lang.String
+     * @Description: 将一张表加入同步计划
+     */
+    @PostMapping("/addsynctab")
+    public String addSyncTab(SyncBean sb){
+        syncRepository.save(sb);
+        return "";
+    }
+
 }

@@ -64,7 +64,7 @@ function addsynctab() {
                 shadeClose: true,
                 shade: 0.8,
                 anim:4,
-                area: ['720px', '500px'],
+                area: ['680px', '300px'],
                 content: '<form class="form-horizontal" role="form">\n' +
                 '\t\n' +
                 '\t\t<div class="form-group">\n' +
@@ -126,7 +126,6 @@ function addsynctab() {
                 '\n' +
                 '\t\t<div class="space-4"></div>\n' +
                 '\n' +
-                '\t\t<div class="clearfix form-actions">\n' +
                 '\t\t\t<div class="col-md-offset-3 col-md-9">\n' +
                 '\t\t\t\t<button class="btn btn-info" type="button">\n' +
                 '\t\t\t\t\t<i class="icon-ok bigger-110"></i>\n' +
@@ -139,7 +138,6 @@ function addsynctab() {
                 '\t\t\t\t\tReset\n' +
                 '\t\t\t\t</button>\n' +
                 '\t\t\t</div>\n' +
-                '\t\t</div>\n' +
                 '\n' +
                 '\t\t<div class="hr hr-24"></div>\n' +
                 '\n' +
