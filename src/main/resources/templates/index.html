@@ -721,6 +721,15 @@
 								<div class="row">
 									<div class="col-xs-12">
 										<!-- PAGE CONTENT BEGINS -->
+										<div align="right">
+											<p>
+												<button class="btn btn-sm btn-success" onclick="addsynctab()">
+													<i class="icon-plus"></i>
+													添加新的同步表
+												</button>
+											</p>
+
+										</div>
 
 										<div class="row">
 											<div class="col-xs-12">
@@ -768,7 +777,7 @@
 
 															<td>
 																<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
-																	<button class="btn btn-xs btn-success" onclick="initpage()">
+																	<button class="btn btn-xs btn-success" onclick="clickbutton()">
 																		<i class="icon-ok bigger-120"></i>
 																	</button>
 																	<button class="btn btn-xs btn-warning">
@@ -948,61 +957,11 @@
 
 										<div class="row">
 											<div class="col-xs-8">
-												<div class="progress" data-percent="66%">
-													<div class="progress-bar" style="width:66%;"></div>
+
+												<div id="jdtz" class="progress progress-striped active" data-percent="0% ">
+													<div id="jdt" class="progress-bar" style="width: 0%;"></div>
 												</div>
 
-												<div id="jdtz" class="progress progress-striped active" data-percent="25% ">
-													<div id="jdt" class="progress-bar" style="width: 25%;"></div>
-												</div>
-
-												<div class="progress progress-small progress-striped active">
-													<div class="progress-bar progress-bar-warning" style="width: 40%;"></div>
-												</div>
-
-												<div class="progress progress-mini">
-													<div class="progress-bar progress-danger" style="width: 35%;"></div>
-												</div>
-
-												<div class="progress">
-													<div class="progress-bar progress-bar-success" style="width: 35%;"></div>
-
-													<div class="progress-bar progress-bar-warning" style="width: 20%;"></div>
-
-													<div class="progress-bar progress-bar-danger" style="width: 10%;"></div>
-												</div>
-
-												<div class="progress progress-striped">
-													<div class="progress-bar progress-bar-purple" style="width: 65%"></div>
-												</div>
-
-												<div class="progress progress-striped">
-													<div class="progress-bar progress-bar-pink" style="width: 40%"></div>
-												</div>
-
-												<div class="progress progress-striped active">
-													<div class="progress-bar progress-bar-yellow" style="width: 60%"></div>
-												</div>
-
-												<div class="progress progress-striped">
-													<div class="progress-bar progress-bar-inverse" style="width: 80%"></div>
-												</div>
-											</div><!-- /span -->
-
-											<div class="col-xs-4 center">
-												<div class="easy-pie-chart percentage" data-percent="20" data-color="#D15B47">
-													<span class="percent">20</span>%
-												</div>
-
-												<hr />
-												<div class="easy-pie-chart percentage" data-percent="55" data-color="#87CEEB">
-													<span class="percent">55</span>%
-												</div>
-
-												<hr />
-												<div class="easy-pie-chart percentage" data-percent="90" data-color="#87B87F">
-													<span class="percent">90</span>%
-												</div>
 											</div><!-- /span -->
 										</div><!-- /row-fluid -->
 									</div><!-- /span -->
@@ -1063,10 +1022,7 @@
 					</div>
 				</div><!-- /#ace-settings-container -->
 			</div><!-- /.main-container-inner -->
-
-			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-				<i class="icon-double-angle-up icon-only bigger-110"></i>
-			</a>
+				</div></div>
 		</div><!-- /.main-container -->
 
 		<!-- basic scripts -->
@@ -1115,6 +1071,7 @@
 		<script src="assets/js/flot/jquery.flot.min.js"></script>
 		<script src="assets/js/flot/jquery.flot.pie.min.js"></script>
 		<script src="assets/js/flot/jquery.flot.resize.min.js"></script>
+		<script src="assets/layer/layer.js"></script>
 
 		<!-- ace scripts -->
 
@@ -1126,7 +1083,7 @@
 
 		<script type="text/javascript">
 			jQuery(function($) {
-			    initpage();
+			     initpage();
 				$('.easy-pie-chart.percentage').each(function(){
 					var $box = $(this).closest('.infobox');
 					var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
@@ -1320,7 +1277,7 @@
 			
 			})
 		</script>
-	 
+
 </body>
 </html>
 

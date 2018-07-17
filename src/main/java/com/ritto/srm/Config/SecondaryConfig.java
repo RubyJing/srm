@@ -42,7 +42,7 @@ public class SecondaryConfig {
         return builder
                 .dataSource(secondaryDataSource)
                 .properties(getVendorProperties(secondaryDataSource))
-                .packages("com.ritto.srm.Entity") //设置实体类所在位置
+                .packages("com.ritto.srm.Entity2") //设置实体类所在位置
                 .persistenceUnit("primaryPersistenceUnit")
                 .build();
     }

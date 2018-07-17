@@ -25,10 +25,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //关闭 CSRF 保护
+        http.csrf().disable();
         //HttpSecurity 注释
         http.authorizeRequests()
                 //..assets目录下的所有资源能够被所有人访问
                 .antMatchers("/assets/**").permitAll()
+                .antMatchers("/temp/**").permitAll()
                 // ..admin目录下只有ADMIN权限的能访问 所有请求都需要进行验证
                 .antMatchers("/admin").hasRole("ADMIN").anyRequest().fullyAuthenticated()
                 .and()
@@ -50,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    }
 
     @Bean
-    public JdbcUserDetailsManager jdbcUserDetailsManager(@Qualifier("dataSource") DataSource dataSource) {
+    public JdbcUserDetailsManager jdbcUserDetailsManager(@Qualifier("primaryDataSource") DataSource dataSource) {
         JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager();
         jdbcUserDetailsManager.setDataSource(dataSource);
         jdbcUserDetailsManager.setUsersByUsernameQuery("SELECT user_name,password,true from h_user where user_name = ?");

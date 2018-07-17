@@ -45,7 +45,7 @@ public class PrimaryConfig {
         return builder
                 .dataSource(primaryDataSource)
                 .properties(getVendorProperties(primaryDataSource))
-                .packages("com.zxl.examples.entity") //设置实体类所在位置
+                .packages("com.ritto.srm.Entity") //设置实体类所在位置
                 .persistenceUnit("primaryPersistenceUnit")
                 .build();
     }
