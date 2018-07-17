@@ -65,14 +65,14 @@ function addsynctab() {
                 shade: 0.8,
                 anim:4,
                 area: ['680px', '300px'],
-                content: '<form class="form-horizontal" role="form">\n' +
+                content: '<form id="form-sync" class="form-horizontal" action="/list/addsynctab" method="POST" role="form">\n' +
                 '\t\n' +
                 '\t\t<div class="form-group">\n' +
                 '\t\t\t\n' +
                 '\t\t\t<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 需要同步的表 </label>\n' +
                 '\n' +
                 '\t\t\t<div class="col-sm-5">\n' +
-                '\t\t\t\t<select class="form-control" id="table-select">\n' +
+                '\t\t\t\t<select name="syncTabName" class="form-control" id="table-select">\n' +
                 '\t\t\t\t\t<option value="">&nbsp;</option>\n' +
                 opt_html+
                 '\t\t\t\t</select>\n' +
@@ -85,7 +85,7 @@ function addsynctab() {
                 '\t\t\t<label class="col-sm-3 control-label no-padding-right" for="form-input-readonly"> 同步频率（小时/每次） </label>\n' +
                 '\n' +
                 '\t\t\t<div class="col-sm-8">\n' +
-                '\t\t\t\t<input type="text" class="col-xs-10 col-sm-7" id="form-input-readonly" value="" />\n' +
+                '\t\t\t\t<input type="text" name="syncRateH" class="col-xs-10 col-sm-7" id="form-input-readonly" value="" />\n' +
                 '\t\t\t</div>\n' +
                 '\t\t</div>\n' +
                 '\n' +
@@ -127,15 +127,15 @@ function addsynctab() {
                 '\t\t<div class="space-4"></div>\n' +
                 '\n' +
                 '\t\t\t<div class="col-md-offset-3 col-md-9">\n' +
-                '\t\t\t\t<button class="btn btn-info" type="button">\n' +
+                '\t\t\t\t<button class="btn btn-info" type="submit">\n' +
                 '\t\t\t\t\t<i class="icon-ok bigger-110"></i>\n' +
-                '\t\t\t\t\tSubmit\n' +
+                '\t\t\t\t\t提交\n' +
                 '\t\t\t\t</button>\n' +
                 '\n' +
                 '\t\t\t\t&nbsp; &nbsp; &nbsp;\n' +
                 '\t\t\t\t<button class="btn" type="reset">\n' +
                 '\t\t\t\t\t<i class="icon-undo bigger-110"></i>\n' +
-                '\t\t\t\t\tReset\n' +
+                '\t\t\t\t\t取消\n' +
                 '\t\t\t\t</button>\n' +
                 '\t\t\t</div>\n' +
                 '\n' +
