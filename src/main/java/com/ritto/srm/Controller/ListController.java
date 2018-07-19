@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 
@@ -87,9 +89,11 @@ public class ListController {
      */
     @PostMapping("/addsynctab")
     public String addSyncTab(SyncBean sb){
-        String result = "success";
+        String result = "fail";
+        sb.setLastSyncDate(new Timestamp(new Date().getTime()));
         if (null != syncRepository.save(sb)){
-            result = "fail";
+            result = "success";
+
         }
         return result;
     }
