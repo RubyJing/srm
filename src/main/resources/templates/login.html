@@ -38,6 +38,8 @@
 	<!--[if lt IE 9]>
 	<script src="assets/js/html5shiv.js"></script>
 	<script src="assets/js/respond.min.js"></script>
+	
+	
 	<![endif]-->
 </head>
 <body class="login-layout" onload="document.f.username.focus();">
@@ -52,7 +54,7 @@
 							<span class="red"></span>
 							<span class="white">后台管理系统</span>
 						</h1>
-						<h4 class="blue">&copy; Eiden J.P Ritto</h4>
+						<h4 class="blue">&copy;范网科技</h4>
 					</div>
 
 					<div class="space-6"></div>
@@ -305,6 +307,32 @@
         jQuery('.widget-box.visible').removeClass('visible');
         jQuery('#'+id).addClass('visible');
     }
+   <!--获取url里面的参数 -->
+    var urlData = {};
+    function getUrl() {
+        var url = decodeURI(location.search);
+        console.log(url);
+        if (url.indexOf("?") != -1)//url中存在问号，也就说有参数。
+        {
+            var str = url.substr(1);
+            var strs = str.split("&");
+            console.log(strs);
+            console.log(str);
+            for (var i = 0; i < strs.length; i++) {
+                urlData[strs[i].split("=")[0]] = strs[i].split("=")[1]
+            }
+        }
+        return str;
+
+    }
+
+    <!--判断登陆失败 -->
+    $(function() {
+        getUrl();
+		if ('error' == urlData['type']){
+		    alert("账号密码错误，请重新输入！")
+		}
+    });
 </script>
 </body>
 </html>

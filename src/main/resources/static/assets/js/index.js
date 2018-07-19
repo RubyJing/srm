@@ -63,6 +63,10 @@ function sleep(numberMillis) {
             return;
     }
 }
+//退出当前页面，回到登录页面
+function exit() {
+    self.location='/logout';
+}
 
 //添加同步表
 function addsynctab() {
