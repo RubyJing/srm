@@ -93,6 +93,7 @@ public class ListController {
         sb.setLastSyncDate(new Timestamp(new Date().getTime()));
         if (null != syncRepository.save(sb)){
             result = "success";
+
         }
         return result;
     }

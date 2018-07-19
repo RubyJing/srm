@@ -1,17 +1,34 @@
-var go;
 
 function initpage() {
-
+    //初始化表
+    inittable();
 }
 
-function clickbutton() {
+function sub() {
+    $.ajax({
+        url:'/list/addsynctab',
+        type:'POST',
+        data:$('#form-sync').serialize(),
+        async:false,
+        success:function (data) {
+            if (data == 'success'){
+                window.location.reload();
+            }
+            alert('提交失败');
+        }
+    });
+}
+
+function clickbutton(id) {
     var ii = 0;
      // $(".progress-bar").attr("style","width:0%");
-    go = setInterval(function() {
+     var go = setInterval(function() {
         if (ii < 101) {
             var j = ii+"%";
-            document.getElementById('jdt').style.width = j;
-            $('#jdtz').attr('data-percent',j);
+            var jdt = 'jdt'+id;
+            var jdtz = '#jdtz'+id;
+            document.getElementById(jdt).style.width = j;
+            $(jdtz).attr('data-percent',j);
             ii++;
             // $("#jdt").attr("style",j);
         } else {
@@ -65,7 +82,7 @@ function addsynctab() {
                 shade: 0.8,
                 anim:4,
                 area: ['680px', '300px'],
-                content: '<form id="form-sync" class="form-horizontal" action="/list/addsynctab" method="POST" role="form">\n' +
+                content: '<form id="form-sync" class="form-horizontal" action="/list/addsynctab" method="POST" role="form" onsubmit="return sub()";>\n' +
                 '\t\n' +
                 '\t\t<div class="form-group">\n' +
                 '\t\t\t\n' +
@@ -109,7 +126,7 @@ function addsynctab() {
                 // '\t\t<div class="space-4"></div>\n' +
                 // '\n' +
                 '\t\t<div class="form-group">\n' +
-                '\t\t\t<label class="col-sm-3 control-label no-padding-right">Input with Icon</label>\n' +
+                '\t\t\t<label class="col-sm-3 control-label no-padding-right">xxxx</label>\n' +
                 '\n' +
                 '\t\t\t<div class="col-sm-9">\n' +
                 '\t\t\t\t<span class="input-icon">\n' +
@@ -127,7 +144,7 @@ function addsynctab() {
                 '\t\t<div class="space-4"></div>\n' +
                 '\n' +
                 '\t\t\t<div class="col-md-offset-3 col-md-9">\n' +
-                '\t\t\t\t<button class="btn btn-info" type="submit">\n' +
+                '\t\t\t\t<button class="btn btn-info" type="" onclick="sub()">\n' +
                 '\t\t\t\t\t<i class="icon-ok bigger-110"></i>\n' +
                 '\t\t\t\t\t提交\n' +
                 '\t\t\t\t</button>\n' +
@@ -145,5 +162,51 @@ function addsynctab() {
             });
         }
     });
+}
 
+function inittable() {
+    $.ajax({
+        url:'/list/findallsync',
+        type:'POST',
+        success:function (data) {
+            var html = '';
+            for ( var i = 0; i <data.length; i++){
+                var syncstate = '';
+                if (data[i].lastSyncState == "已同步"){
+                    syncstate ="<span class='label label-sm label-success'>已同步</span>";
+                }
+                if (data[i].lastSyncState == "同步失败"){
+                    syncstate ="<span class='label label-sm label-warning'>同步失败</span>";
+                }
+                if (data[i].lastSyncState == "未同步"){
+                    syncstate = "<span class='label label-sm label-inverse arrowed-in'>未同步</span>";
+                }
+                html += "<tr>\n" +
+                    "<td class=\"center\">\n" +
+                    "\t<label>\n" +
+                    "\t\t<input type=\"checkbox\" class=\"ace\" />\n" +
+                    "\t\t<span class=\"lbl\"></span>\n" +
+                    "\t</label>\n" +
+                    "</td>\n" +
+                    "<td>" + data[i].syncTabName + "</td>" +
+                    "<td>" + data[i].lastSyncDate + "</td>" +
+                    "<td>" + data[i].syncRateH + "小时/次</td>" +
+                    "<td>0</td>" +
+                    "<td class=\"hidden-480\">" + syncstate + "</td>" +
+                    "<td>\n" +
+                    "<div class=\"visible-md visible-lg hidden-sm hidden-xs btn-group\">\n" +
+                    "<button class=\"btn btn-xs btn-success\" onclick=\"clickbutton("+data[i].id+")\">\n" +
+                    "<i class=\"icon-ok bigger-120\"></i>\n" +
+                    "</button>\n" +
+                    "<div class=\"col-xs-10\">\n" +
+                    "<div id=\"jdtz"+data[i].id+"\" class=\"progress progress-striped active\" data-percent=\"0% \">\n" +
+                    "<div id=\"jdt"+data[i].id+"\" class=\"progress-bar\" style=\"width: 0%;\"></div>\n" +
+                    "</div>\n" +
+                    "</div>\n" +
+                    "</div>\n" +
+                    "</td></tr>";
+            }
+            $("#tbody").html(html);
+        }
+    });
 }
