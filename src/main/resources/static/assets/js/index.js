@@ -190,7 +190,7 @@ function inittable() {
                     "\t</label>\n" +
                     "</td>\n" +
                     "<td>" + data[i].syncTabName + "</td>" +
-                    "<td>" + data[i].lastSyncDate.toTimeString() + "</td>" +
+                    "<td>" + data[i].lastSyncDate+ "</td>" +
                     "<td>" + data[i].syncRateH + "小时/次</td>" +
                     "<td>0</td>" +
                     "<td class=\"hidden-480\">" + syncstate + "</td>" +
