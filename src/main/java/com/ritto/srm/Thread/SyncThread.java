@@ -1,11 +1,8 @@
 package com.ritto.srm.Thread;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.Iterator;
@@ -18,28 +15,28 @@ import java.util.List;
  * @Modified By:
  */
 public class SyncThread extends Thread{
-    @Autowired
-    @Qualifier("primaryJdbcTemplate")
+    public static Integer jdt ;
     protected JdbcTemplate jdbcTemplate1;
 
-    @Autowired
-    @Qualifier("secondaryJdbcTemplate")
     protected JdbcTemplate jdbcTemplate2;
 
-    @PersistenceContext
     EntityManager entityManager;
 
     private String tabname;
-    public SyncThread(String name){
+    public SyncThread(String name,JdbcTemplate jt1,JdbcTemplate jt2,EntityManager em){
         tabname = name;
+        jdbcTemplate1 = jt1;
+        jdbcTemplate2 = jt2;
+        entityManager = em;
+        jdt = 0;
     }
 
     @Transactional
     @Override
     public void run(){
         int count = Integer.parseInt(entityManager.createNativeQuery("SELECT COUNT(*) FROM "+tabname).getSingleResult().toString());
-        for (int i=0;i<count;i+=100){
-            Query query = entityManager.createNativeQuery("SELECT * FROM "+tabname+" WHERE 1=1 LIMIT "+i+",100");
+         for (int i=0;i<count;i+=10){
+            Query query = entityManager.createNativeQuery("SELECT * FROM "+tabname+" WHERE 1=1 LIMIT "+i+",10");
 //			query.setParameter(1,tablename);
             List objectList = query.getResultList();
             Iterator it = objectList.iterator();
@@ -68,6 +65,16 @@ public class SyncThread extends Thread{
                     System.out.println("seccess");
                 }
             }
+            jdt = i*10/count>100?100:i*10/count;
+        }
+        jdt = 100;
+         //同步完成后
+        StringBuffer sql = new StringBuffer();
+        sql.append("UPDATE sync SET last_sync_state ='已同步' WHERE sync_tab_name = '");
+        sql.append(tabname);
+        sql.append("'");
+        if (jdbcTemplate1.update(sql.toString())>0){
+            System.out.println("同步成功");
         }
     }
 }

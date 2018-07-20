@@ -1,6 +1,7 @@
 package com.ritto.srm;
 
 import com.ritto.srm.Entity.CpuBean;
+import com.ritto.srm.Thread.SyncThread;
 import com.ritto.srm.service.jpa.cpuRepository;
 import com.ritto.srm.service.jpa2.cpuRepository2;
 import org.junit.Assert;
@@ -89,6 +90,12 @@ public class SrmApplicationTests {
 
 	@Test
 	public void jpatest(){
-
+		StringBuffer sql = new StringBuffer();
+		sql.append("UPDATE sync SET last_sync_state ='已同步' WHERE sync_tab_name = '");
+		sql.append("cpu");
+		sql.append("'");
+		if (jdbcTemplate1.update(sql.toString())>0){
+			System.out.println("同步成功");
+		}
 	}
 }
