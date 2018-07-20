@@ -19,34 +19,37 @@ function sub() {
     });
 }
 
-function clickbutton(id) {
-    var ii = 0;
-     // $(".progress-bar").attr("style","width:0%");
-     var go = setInterval(function() {
-        if (ii < 101) {
-            var j = ii+"%";
-            var jdt = 'jdt'+id;
-            var jdtz = '#jdtz'+id;
-            document.getElementById(jdt).style.width = j;
-            $(jdtz).attr('data-percent',j);
-            ii++;
-            // $("#jdt").attr("style",j);
-        } else {
-            setTimeout(function() {
-
-                // content.innerHTML = '加载完成';
-
-                clearInterval(go);
-            }, 100);
-        }
-    }, 100);
+function clickbutton(id,synctabname) {
     $.ajax({
-        url:'/list/dothis',
-        type:'GET',
+        url:'/list/synctab',
+        type:'POST',
+        data:{tabname:synctabname},
+        async:false,
         success:function (data) {
-
+            console.log("Sync ing.....");
         }
     });
+    var jdt = 'jdt'+id;
+    var jdtz = '#jdtz'+id;
+     // $(".progress-bar").attr("style","width:0%");
+     var go = setInterval(function() {
+         $.ajax({
+             url:'/list/jdt',
+             type:'GET',
+             success:function (data) {
+                 var persent = data+"%";
+                 document.getElementById(jdt).style.width = persent;
+                 $(jdtz).attr('data-percent',persent);
+                 if (data == '100'){
+                     setTimeout(function() {
+                         // content.innerHTML = '加载完成';
+                         clearInterval(go);
+                     }, 100);
+                 }
+             }
+         });
+    }, 1000);
+
     // for (var i = 0;i<100;i++){
     //     sleep(1);
     //     var j = "width:"+i+"%";
@@ -200,7 +203,7 @@ function inittable() {
                     "<td class=\"hidden-480\">" + syncstate + "</td>" +
                     "<td>\n" +
                     "<div class=\"visible-md visible-lg hidden-sm hidden-xs btn-group\">\n" +
-                    "<button class=\"btn btn-xs btn-success\" onclick=\"clickbutton("+data[i].id+")\">\n" +
+                    "<button class=\"btn btn-xs btn-success\" onclick=\"clickbutton("+data[i].id+",'"+data[i].syncTabName+"')\">\n" +
                     "<i class=\"icon-ok bigger-120\"></i>\n" +
                     "</button>\n" +
                     "<div class=\"col-xs-10\">\n" +

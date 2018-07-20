@@ -3,11 +3,14 @@ package com.ritto.srm.Controller;
 import com.ritto.srm.Entity.CpuBean;
 import com.ritto.srm.Entity.SyncBean;
 import com.ritto.srm.Entity2.CpuBeanBack;
+import com.ritto.srm.Thread.SyncThread;
 import com.ritto.srm.Util.ObjectConvertor;
 import com.ritto.srm.service.jpa.SyncRepository;
 import com.ritto.srm.service.jpa.cpuRepository;
 import com.ritto.srm.service.jpa2.cpuRepository2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +34,14 @@ import java.util.List;
 public class ListController {
     @PersistenceContext //注入的是实体管理器,执行持久化操作
     EntityManager entityManager;
+
+    @Autowired
+    @Qualifier("primaryJdbcTemplate")
+    protected JdbcTemplate jdbcTemplate1;
+
+    @Autowired
+    @Qualifier("secondaryJdbcTemplate")
+    protected JdbcTemplate jdbcTemplate2;
 
     @Autowired
     private SyncRepository syncRepository;
@@ -100,8 +111,13 @@ public class ListController {
 
     @PostMapping("/synctab")
     public String synctab(String tabname){
-
+        SyncThread syncThread = new SyncThread(tabname,jdbcTemplate1,jdbcTemplate2,entityManager);
+        syncThread.start();
         return "";
     }
 
+    @GetMapping("/jdt")
+    public String jdt(){
+        return SyncThread.jdt.toString();
+    }
 }

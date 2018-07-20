@@ -18,6 +18,7 @@ public class SyncBean {
     private Timestamp lastSyncDate;
     private String lastSyncState;
     private Integer syncRateH;
+    private Integer dataIndex;
 
     @Id
     @Column(name = "id")
