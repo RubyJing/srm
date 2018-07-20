@@ -91,11 +91,17 @@ public class ListController {
     public String addSyncTab(SyncBean sb){
         String result = "fail";
         sb.setLastSyncDate(new Timestamp(new Date().getTime()));
+        sb.setLastSyncState("未同步");
         if (null != syncRepository.save(sb)){
             result = "success";
-
         }
         return result;
+    }
+
+    @PostMapping("/synctab")
+    public String synctab(String tabname){
+
+        return "";
     }
 
 }
