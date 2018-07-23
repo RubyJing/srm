@@ -70,6 +70,12 @@ public class SyncBean {
         this.syncRateH = syncRateH;
     }
 
+    @Basic
+    @Column(name = "data_index")
+    public Integer getDataIndex(){return dataIndex;}
+
+    public void setDataIndex(Integer dataIndex){this.dataIndex = dataIndex;}
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,12 +85,13 @@ public class SyncBean {
                 Objects.equals(syncTabName, syncBean.syncTabName) &&
                 Objects.equals(lastSyncDate, syncBean.lastSyncDate) &&
                 Objects.equals(lastSyncState, syncBean.lastSyncState) &&
-                Objects.equals(syncRateH, syncBean.syncRateH);
+                Objects.equals(syncRateH, syncBean.syncRateH) &&
+                Objects.equals(dataIndex, syncBean.dataIndex);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, syncTabName, lastSyncDate, lastSyncState, syncRateH);
+        return Objects.hash(id, syncTabName, lastSyncDate, lastSyncState, syncRateH, dataIndex);
     }
 }
