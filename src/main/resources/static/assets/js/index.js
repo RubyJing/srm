@@ -205,10 +205,13 @@ function inittable(data) {
                     "<td class=\"hidden-480\">" + syncstate + "</td>" +
                     "<td>\n" +
                     "<div class=\"visible-md visible-lg hidden-sm hidden-xs btn-group\">\n" +
+                    "<button class=\"btn btn-danger btn-xs\" style=\"width:28px\">\n" +
+                    "<i class=\"icon-trash bigger-50\"></i>\n" +
+                    "</button>"+
                     "<button class=\"btn btn-xs btn-success\" onclick=\"clickbutton("+data.result[i].id+")\">\n" +
                     "<i class=\"icon-ok bigger-120\"></i>\n" +
                     "</button>\n" +
-                    "<div class=\"col-xs-10\">\n" +
+                    "<div class=\"col-xs-9\">\n" +
                     "<div id=\"jdtz"+data.result[i].id+"\" class=\"progress progress-striped active\" data-percent=\"0% \">\n" +
                     "<div id=\"jdt"+data.result[i].id+"\" class=\"progress-bar\" style=\"width: 0%;\"></div>\n" +
                     "</div>\n" +
@@ -216,20 +219,20 @@ function inittable(data) {
                     "</div>\n" +
                     "</td></tr>";
             }
-             html += "<tr align='center'>\n"
+             html += "<tr>\n"
                     +"<td style='border-color: white;background: white'></td>\n"
                      +"<td style='border-color: white;background: white'></td>\n"
-                     +"<td style='border-color: white;background: white'>\n"
+                     +"<td style='border-color: white;background: white;valign=bottom;text-align-all: bottom'>\n"
                     +"第"+data.currentpage +"页&nbsp;&nbsp; &nbsp;&nbsp;共"+data.totalpages+"页\n"
                     +"</td>\n"
-                    +"<td style='border-color: white;background: white'>\n"
-                             +"<a href='#' onclick='searchpage('+1+')'> "+"首页"+"</a>\n"
+                    +"<td style='border-color: white;background: white;text-align-all: bottom'>\n"
+                             +"<a href='#' onclick='searchpage(1)'> "+"首页"+"</a>\n"
                              + "<a href='#' onclick='searchpage("+(data.currentpage-1)+")'> "+"上一页"+"</a>\n"
                              +"<a href='#' onclick='searchpage("+(data.currentpage+1)+")'> "+"下一页"+"</a>\n"
                              +"<a href='#' onclick='searchpage("+data.totalpages+")'> "+"最后一页"+"</a>\n"
                      +"</td>\n"
                      +"<td style='border-color: white;background: white'>\n"
-                     +"转到第："+"<input type='text' name='page' size='2'>"+"&nbsp;页&nbsp;&nbsp;"+"<input type='submit' value='GO' name='cndok'>\n"
+                     +"转到第："+"<input type='text' name='page' style='width: 30px;height: 20px' id='num'>"+"&nbsp;页&nbsp;&nbsp;"+"<input type='button' onclick='jumppage()'value='GO' name='cndok'>\n"
                      +"</td>\n"
                     +"</tr>"
 
@@ -240,4 +243,9 @@ function inittable(data) {
 
 function searchpage(data){
     inittable(data);
+}
+
+function jumppage(){
+    var num = $('#num').val();
+    inittable(num);
 }
