@@ -45,6 +45,7 @@ function clickbutton(id,synctabname) {
                          // content.innerHTML = '加载完成';
                          clearInterval(go);
                      }, 100);
+                     $(jdtz).attr('hidden',"");
                  }
              }
          });
