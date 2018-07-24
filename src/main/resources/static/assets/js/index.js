@@ -12,7 +12,7 @@ function sub() {
         if (selectvalue == ""){
             layer.tips('请先选择同步表！', '#table-select');
         }
-        if (timevalue == ""){
+        else if (timevalue == ""){
             layer.tips('同步频率不能为空！', '#form-input-readonly');
         }
     }else {
@@ -26,7 +26,9 @@ function sub() {
                     layer.msg("新增同步表成功！");
                     window.location.reload();
                 }
-                layer.msg("新增失败，请联系管理员！");
+                else{
+                    layer.msg("新增失败，请联系管理员！");
+                }
             }
         });
     }
@@ -176,7 +178,7 @@ function addsynctab() {
                 shade: 0.8,
                 anim:4,
                 area: ['500px', '300px'],
-                content: '<form id="form-sync" class="form-horizontal" action="/list/addsynctab" method="POST" role="form" onsubmit="return sub()";>\n' +
+                content: '<form id="form-sync" class="form-horizontal" >\n' +
                 '\t\n' +
                 '\t\t<div class="form-group" style="margin-top:40px;margin-left:60px"">\n' +
                 '\t\t\t\n' +
@@ -238,7 +240,7 @@ function addsynctab() {
                 '\t\t<div class="space-4"></div>\n' +
                 '\n' +
                 '\t\t\t<div class="col-md-offset-3 col-md-9">\n' +
-                '\t\t\t\t<button class="btn btn-info btn-sm" type="" onclick="sub()">\n' +
+                '\t\t\t\t<button class="btn btn-info btn-sm" onclick="sub()">\n' +
                 '\t\t\t\t\t<i class="icon-ok bigger-110"></i>\n' +
                 '\t\t\t\t\t提交\n' +
                 '\t\t\t\t</button>\n' +
