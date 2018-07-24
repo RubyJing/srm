@@ -4,6 +4,10 @@ function initpage() {
     inittable('0');
 
 }
+//重置表单
+function reset() {
+    document.getElementById("form-sync").reset();
+}
 //提交表单
 function sub() {
     var selectvalue =$('#table-select').val();
@@ -11,9 +15,11 @@ function sub() {
     if(selectvalue == "" ||timevalue == "") {
         if (selectvalue == ""){
             layer.tips('请先选择同步表！', '#table-select');
+            return;
         }
         if (timevalue == ""){
             layer.tips('同步频率不能为空！', '#form-input-readonly');
+            return;
         }
     }else {
         $.ajax({
@@ -25,8 +31,9 @@ function sub() {
                 if (data == 'success'){
                     layer.msg("新增同步表成功！");
                     window.location.reload();
+                }else {
+                    layer.msg("新增失败，请联系管理员！");
                 }
-                layer.msg("新增失败，请联系管理员！");
             }
         });
     }
@@ -202,51 +209,18 @@ function addsynctab() {
                 '\n' +
                 '\t\t<div class="space-4"></div>\n' +
                 '\n' +
-                // '\t\t<div class="form-group">\n' +
-                // '\t\t\t\n' +
-                // '\t\t\t<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 同步单位 </label>\n' +
-                // '\n' +
-                // '\t\t\t<div class="col-sm-7">\n' +
-                // '\t\t\t\t<select class="form-control" id="table-select">\n' +
-                // '\t\t\t\t\t<option value="分钟">分钟</option>\n' +
-                // '\t\t\t\t\t<option value="小时">小时</option>\n' +
-                // '\t\t\t\t\t<option value="日">日</option>\n' +
-                // '\t\t\t\t\t<option value="月">月</option>\n' +
-                // '\t\t\t\t</select>\n' +
-                // '\t\t\t</div>\n' +
-                // '\t\t</div>\n' +
-                // '\n' +
-                //
-                // '\t\t<div class="space-4"></div>\n' +
-                // '\n' +
-                // '\t\t<div class="form-group">\n' +
-                // '\t\t\t<label class="col-sm-3 control-label no-padding-right">xxxx</label>\n' +
-                // '\n' +
-                // '\t\t\t<div class="col-sm-9">\n' +
-                // '\t\t\t\t<span class="input-icon">\n' +
-                // '\t\t\t\t\t<input type="text" id="form-field-icon-1" />\n' +
-                // '\t\t\t\t\t<i class="icon-leaf blue"></i>\n' +
-                // '\t\t\t\t</span>\n' +
-                // '\n' +
-                // '\t\t\t\t<span class="input-icon input-icon-right">\n' +
-                // '\t\t\t\t\t<input type="text" id="form-field-icon-2" />\n' +
-                // '\t\t\t\t\t<i class="icon-leaf green"></i>\n' +
-                // '\t\t\t\t</span>\n' +
-                // '\t\t\t</div>\n' +
-                // '\t\t</div>\n' +
-                // '\n' +
                 '\t\t<div class="space-4"></div>\n' +
                 '\n' +
                 '\t\t\t<div class="col-md-offset-3 col-md-9">\n' +
-                '\t\t\t\t<button class="btn btn-info btn-sm" type="" onclick="sub()">\n' +
+                '\t\t\t\t<button class="btn btn-info btn-sm" type="button" onclick="sub()">\n' +
                 '\t\t\t\t\t<i class="icon-ok bigger-110"></i>\n' +
                 '\t\t\t\t\t提交\n' +
                 '\t\t\t\t</button>\n' +
                 '\n' +
                 '\t\t\t\t&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;\n' +
-                '\t\t\t\t<button class="btn btn-sm" type="reset">\n' +
+                '\t\t\t\t<button class="btn btn-sm" type="reset" onclick="reset();">\n' +
                 '\t\t\t\t\t<i class="icon-undo bigger-110"></i>\n' +
-                '\t\t\t\t\t取消\n' +
+                '\t\t\t\t\t重置\n' +
                 '\t\t\t\t</button>\n' +
                 '\t\t\t</div>\n' +
                 '\n' +
