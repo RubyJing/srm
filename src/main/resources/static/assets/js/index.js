@@ -2,7 +2,6 @@
 function initpage() {
     //初始化表
     inittable('0');
-
 }
 //提交表单
 function sub() {
@@ -12,7 +11,7 @@ function sub() {
         if (selectvalue == ""){
             layer.tips('请先选择同步表！', '#table-select');
         }
-        else if (timevalue == ""){
+        if (timevalue == ""){
             layer.tips('同步频率不能为空！', '#form-input-readonly');
         }
     }else {
@@ -26,9 +25,7 @@ function sub() {
                     layer.msg("新增同步表成功！");
                     window.location.reload();
                 }
-                else{
-                    layer.msg("新增失败，请联系管理员！");
-                }
+                layer.msg("新增失败，请联系管理员！");
             }
         });
     }
@@ -47,7 +44,6 @@ function clickbutton(id,synctabname) {
     });
     var jdt = 'jdt'+id;
     var jdtz = '#jdtz'+id;
-    var st = '#st'+ id;
      // $(".progress-bar").attr("style","width:0%");
      var go = setInterval(function() {
          $.ajax({
@@ -61,14 +57,7 @@ function clickbutton(id,synctabname) {
                      setTimeout(function() {
                          // content.innerHTML = '加载完成';
                          clearInterval(go);
-
                      }, 100);
-                     setTimeout(function() {
-                         // content.innerHTML = '加载完成';
-                         $(jdtz).attr('hidden',"");
-                         $(st).html("<span class='label label-sm label-success'>已同步</span>")
-                     }, 3000);
-
                  }
              }
          });
@@ -178,7 +167,7 @@ function addsynctab() {
                 shade: 0.8,
                 anim:4,
                 area: ['500px', '300px'],
-                content: '<form id="form-sync" class="form-horizontal" >\n' +
+                content: '<form id="form-sync" class="form-horizontal" action="/list/addsynctab" method="POST" role="form" onsubmit="return sub()";>\n' +
                 '\t\n' +
                 '\t\t<div class="form-group" style="margin-top:40px;margin-left:60px"">\n' +
                 '\t\t\t\n' +
@@ -240,7 +229,7 @@ function addsynctab() {
                 '\t\t<div class="space-4"></div>\n' +
                 '\n' +
                 '\t\t\t<div class="col-md-offset-3 col-md-9">\n' +
-                '\t\t\t\t<button class="btn btn-info btn-sm" onclick="sub()">\n' +
+                '\t\t\t\t<button class="btn btn-info btn-sm" type="" onclick="sub()">\n' +
                 '\t\t\t\t\t<i class="icon-ok bigger-110"></i>\n' +
                 '\t\t\t\t\t提交\n' +
                 '\t\t\t\t</button>\n' +
@@ -275,10 +264,10 @@ function inittable(data) {
                     syncstate ="<span class='label label-sm label-success'>已同步</span>";
                 }
                 if (data.result[i].lastSyncState == "同步失败"){
-                    syncstate ="<span class='label label-sm label-inverse arrowed-in'>同步失败</span>";
+                    syncstate ="<span class='label label-sm label-warning'>同步失败</span>";
                 }
                 if (data.result[i].lastSyncState == "未同步"){
-                    syncstate = "<span class='label label-sm label-warning'>未同步</span>";
+                    syncstate = "<span class='label label-sm label-inverse arrowed-in'>未同步</span>";
                 }
                 html += "<tr>\n" +
                     "<td class=\"center\">\n" +
@@ -291,13 +280,13 @@ function inittable(data) {
                     "<td>" + data.result[i].lastSyncDate+ "</td>" +
                     "<td>" + data.result[i].syncRateH + "小时/次</td>" +
                     "<td>0</td>" +
-                    "<td class=\"hidden-480\" id='st"+data.result[i].id+"'>" + syncstate + "</td>" +
+                    "<td class=\"hidden-480\">" + syncstate + "</td>" +
                     "<td>\n" +
                     "<div class=\"visible-md visible-lg hidden-sm hidden-xs btn-group\">\n" +
                     "<button class=\"btn btn-danger btn-xs\" style=\"width:28px\"  onclick=\"deletetab("+data.result[i].id+")\">\n" +
                     "<i class=\"icon-trash bigger-50\"></i>\n" +
                     "</button>"+
-                    "<button class=\"btn btn-xs btn-success\" onclick=\"clickbutton("+data.result[i].id+",'"+data.result[i].syncTabName+"')\">\n" +
+                    "<button class=\"btn btn-xs btn-success\" onclick=\"clickbutton("+data.result[i].id+")\">\n" +
                     "<i class=\"icon-ok bigger-120\"></i>\n" +
                     "</button>\n" +
                     "<div class=\"col-xs-9\">\n" +
