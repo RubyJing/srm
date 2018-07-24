@@ -111,9 +111,14 @@ public class ListController {
 
     @PostMapping("/synctab")
     public String synctab(String tabname){
-        SyncThread syncThread = new SyncThread(tabname,jdbcTemplate1,jdbcTemplate2,entityManager);
-        syncThread.start();
-        return "";
+        if(SyncThread.jdt==0||SyncThread.jdt==100){
+            SyncThread syncThread = new SyncThread(tabname,jdbcTemplate1,jdbcTemplate2,entityManager);
+            syncThread.start();
+        }
+        else {
+            return "fail";
+        }
+        return "success";
     }
 
     @GetMapping("/jdt")
