@@ -11,20 +11,28 @@ import java.util.List;
  * @Modified By:
  */
 public class AutoSyncThread extends Thread {
-    private long time;
+    private int time;
+    List<SyncBean> list;
     AutoSyncThread(List<SyncBean> syncBeanList){
-        syncBeanList.forEach(syncBean -> {
-            time = syncBean.getSyncRateH() * 3600;
-        });
+        time = 0;
+        list = syncBeanList;
+
     }
     @Override
     public void run(){
         while (true){
+
             try {
-                Thread.sleep(time);
+                Thread.sleep(3600000);//休眠一小时
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            time ++;
+            list.forEach(syncBean -> {
+                if(time % syncBean.getSyncRateH() == 0){
+                    //开始同步
+                }
+            });
         }
     }
 }

@@ -15,7 +15,7 @@ import java.util.List;
  * @Modified By:
  */
 public class SyncThread extends Thread{
-    public static Integer jdt ;
+    public static Integer jdt = 0 ;
     protected JdbcTemplate jdbcTemplate1;
 
     protected JdbcTemplate jdbcTemplate2;
@@ -65,7 +65,7 @@ public class SyncThread extends Thread{
                     System.out.println("seccess");
                 }
             }
-            jdt = i*10/count>100?100:i*10/count;
+            jdt = i*100/count>100?100:i*100/count;
         }
         jdt = 100;
          //同步完成后

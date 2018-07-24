@@ -1,3 +1,4 @@
+
 package com.ritto.srm.Controller;
 
 import com.ritto.srm.Entity.CpuBean;
@@ -90,6 +91,7 @@ public class ListController {
         return tablelist;
     }
 
+    
     /**
      * @Auther: Eiden J.P Zhou
      * @Date: 2018/7/17 17:22
@@ -111,9 +113,14 @@ public class ListController {
 
     @PostMapping("/synctab")
     public String synctab(String tabname){
-        SyncThread syncThread = new SyncThread(tabname,jdbcTemplate1,jdbcTemplate2,entityManager);
-        syncThread.start();
-        return "";
+        if(SyncThread.jdt==0||SyncThread.jdt==100){
+            SyncThread syncThread = new SyncThread(tabname,jdbcTemplate1,jdbcTemplate2,entityManager);
+            syncThread.start();
+        }
+        else {
+            return "fail";
+        }
+        return "success";
     }
 
     @GetMapping("/jdt")

@@ -1,7 +1,9 @@
 package com.ritto.srm;
 
 import com.ritto.srm.Entity.CpuBean;
+import com.ritto.srm.Entity.SyncBean;
 import com.ritto.srm.Thread.SyncThread;
+import com.ritto.srm.service.jpa.SyncRepository;
 import com.ritto.srm.service.jpa.cpuRepository;
 import com.ritto.srm.service.jpa2.cpuRepository2;
 import org.junit.Assert;
@@ -17,8 +19,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -31,6 +32,9 @@ public class SrmApplicationTests {
 
 	@Autowired
 	private cpuRepository2 cpuRepository2;
+
+	@Autowired
+	private SyncRepository syncRepository;
 
 	@Autowired
 	@Qualifier("primaryJdbcTemplate")
@@ -98,4 +102,13 @@ public class SrmApplicationTests {
 			System.out.println("同步成功");
 		}
 	}
+
+	@Test
+	public void auto(){
+		List<SyncBean> beanList = syncRepository.findAll();
+		beanList.forEach(syncBean -> {
+			syncBean.getSyncRateH();
+		});
+	}
+
 }
