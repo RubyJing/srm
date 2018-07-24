@@ -2,6 +2,7 @@
 function initpage() {
     //初始化表
     inittable('0');
+
 }
 //提交表单
 function sub() {
