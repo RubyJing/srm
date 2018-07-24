@@ -1,3 +1,4 @@
+
 package com.ritto.srm.Controller;
 
 import com.ritto.srm.Entity.CpuBean;
@@ -90,6 +91,7 @@ public class ListController {
         return tablelist;
     }
 
+    
     /**
      * @Auther: Eiden J.P Zhou
      * @Date: 2018/7/17 17:22
@@ -124,5 +126,42 @@ public class ListController {
     @GetMapping("/jdt")
     public String jdt(){
         return SyncThread.jdt.toString();
+    }
+
+    /**
+     * 删除同步表（不删除原来的表，仅仅在同步记录表中删除）
+     * @param id
+     * @return
+     */
+    @PostMapping("/delettab")
+    public String deleteTab(String id){
+        int sid = Integer.parseInt(id);
+        String result = "success";
+        try{
+            syncRepository.deleteById(sid);
+        }catch (Exception e){
+            result = "fail";
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 勾选多个删除同步表
+     * @param ids
+     * @return
+     */
+    @PostMapping("/deletselecttab")
+    public String deletselecttab(String [] ids){
+        String result = "success";
+        try{
+            for (int i = 0; i < ids.length; i++) {
+                syncRepository.deleteById(Integer.parseInt(ids[i]));
+            }
+        }catch (Exception e){
+            result = "fail";
+        }
+        return result;
+
     }
 }

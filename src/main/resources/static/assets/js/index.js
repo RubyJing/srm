@@ -2,23 +2,37 @@
 function initpage() {
     //初始化表
     inittable('0');
-}
 
+}
+//提交表单
 function sub() {
-    $.ajax({
-        url:'/list/addsynctab',
-        type:'POST',
-        data:$('#form-sync').serialize(),
-        async:false,
-        success:function (data) {
-            if (data == 'success'){
-                window.location.reload();
-            }else
-            {alert('提交失败');}
+    var selectvalue =$('#table-select').val();
+    var timevalue =$('#form-input-readonly').val();
+    if(selectvalue == "" ||timevalue == "") {
+        if (selectvalue == ""){
+            layer.tips('请先选择同步表！', '#table-select');
         }
-    });
+        if (timevalue == ""){
+            layer.tips('同步频率不能为空！', '#form-input-readonly');
+        }
+    }else {
+        $.ajax({
+            url:'/list/addsynctab',
+            type:'POST',
+            data:$('#form-sync').serialize(),
+            async:false,
+            success:function (data) {
+                if (data == 'success'){
+                    layer.msg("新增同步表成功！");
+                    window.location.reload();
+                }
+                layer.msg("新增失败，请联系管理员！");
+            }
+        });
+    }
 }
 
+//同步
 function clickbutton(id,synctabname) {
     $.ajax({
         url:'/list/synctab',
@@ -65,6 +79,71 @@ function clickbutton(id,synctabname) {
     // }
 }
 
+//多选同步
+function clickmorebutton() {
+    var flag = false;
+    var checkElements=document.getElementsByName('items');
+    var ids = new Array();
+    for (var i=0;i<checkElements.length;i++){
+        //获取打勾的id
+        var checkElement=checkElements[i];
+        if(checkElement.checked){
+            var id = checkElement.id;
+            ids.push(id);
+            flag = true;
+        }
+    }
+    if (!flag){
+        layer.msg("请先选择要同步的表！");
+    }else{
+        layer.confirm('确认开始同步吗？', {
+            btn: ['同步','取消'] //按钮
+        }, function() {
+            $.ajax({
+                url:'/list/synctab',
+                type:'POST',
+                data:{tabname:synctabname},
+                async:false,
+                success:function (data) {
+                    console.log("Sync ing.....");
+                }
+            });
+            var jdt = 'jdt'+id;
+            var jdtz = '#jdtz'+id;
+            var go = setInterval(function() {
+                $.ajax({
+                    url:'/list/jdt',
+                    type:'GET',
+                    success:function (data) {
+                        var persent = data+"%";
+                        document.getElementById(jdt).style.width = persent;
+                        $(jdtz).attr('data-percent',persent);
+                        if (data == '100'){
+                            setTimeout(function() {
+                                // content.innerHTML = '加载完成';
+                                clearInterval(go);
+                            }, 100);
+                        }
+                    }
+                });
+            }, 1000);
+
+
+            if (data == 'success') {
+                layer.msg("同步启动成功", {
+                    skin: 'layui-layer-molv' //样式类名
+                    , closeBtn: 0
+                }, function () {
+                    location.reload();
+                });
+            } else {
+                layer.msg("同步失败，请联系管理员！");
+            }
+
+        })
+    }
+}
+
 function sleep(numberMillis) {
     var now = new Date();
     var exitTime = now.getTime() + numberMillis;
@@ -96,10 +175,10 @@ function addsynctab() {
                 shadeClose: true,
                 shade: 0.8,
                 anim:4,
-                area: ['680px', '300px'],
+                area: ['500px', '300px'],
                 content: '<form id="form-sync" class="form-horizontal" action="/list/addsynctab" method="POST" role="form" onsubmit="return sub()";>\n' +
                 '\t\n' +
-                '\t\t<div class="form-group">\n' +
+                '\t\t<div class="form-group" style="margin-top:40px;margin-left:60px"">\n' +
                 '\t\t\t\n' +
                 '\t\t\t<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 需要同步的表 </label>\n' +
                 '\n' +
@@ -113,8 +192,8 @@ function addsynctab() {
                 '\n' +
                 '\t\t<div class="space-4"></div>\n' +
                 '\n' +
-                '\t\t<div class="form-group">\n' +
-                '\t\t\t<label class="col-sm-3 control-label no-padding-right" for="form-input-readonly"> 同步频率（小时/每次） </label>\n' +
+                '\t\t<div class="form-group" style="margin-left: 60px">\n' +
+                '\t\t\t<label class="col-sm-3 control-label no-padding-right" for="form-input-readonly"> 同步频率(时/次)</label>\n' +
                 '\n' +
                 '\t\t\t<div class="col-sm-8">\n' +
                 '\t\t\t\t<input type="text" name="syncRateH" class="col-xs-10 col-sm-7" id="form-input-readonly" value="" />\n' +
@@ -140,32 +219,32 @@ function addsynctab() {
                 //
                 // '\t\t<div class="space-4"></div>\n' +
                 // '\n' +
-                '\t\t<div class="form-group">\n' +
-                '\t\t\t<label class="col-sm-3 control-label no-padding-right">xxxx</label>\n' +
-                '\n' +
-                '\t\t\t<div class="col-sm-9">\n' +
-                '\t\t\t\t<span class="input-icon">\n' +
-                '\t\t\t\t\t<input type="text" id="form-field-icon-1" />\n' +
-                '\t\t\t\t\t<i class="icon-leaf blue"></i>\n' +
-                '\t\t\t\t</span>\n' +
-                '\n' +
-                '\t\t\t\t<span class="input-icon input-icon-right">\n' +
-                '\t\t\t\t\t<input type="text" id="form-field-icon-2" />\n' +
-                '\t\t\t\t\t<i class="icon-leaf green"></i>\n' +
-                '\t\t\t\t</span>\n' +
-                '\t\t\t</div>\n' +
-                '\t\t</div>\n' +
-                '\n' +
+                // '\t\t<div class="form-group">\n' +
+                // '\t\t\t<label class="col-sm-3 control-label no-padding-right">xxxx</label>\n' +
+                // '\n' +
+                // '\t\t\t<div class="col-sm-9">\n' +
+                // '\t\t\t\t<span class="input-icon">\n' +
+                // '\t\t\t\t\t<input type="text" id="form-field-icon-1" />\n' +
+                // '\t\t\t\t\t<i class="icon-leaf blue"></i>\n' +
+                // '\t\t\t\t</span>\n' +
+                // '\n' +
+                // '\t\t\t\t<span class="input-icon input-icon-right">\n' +
+                // '\t\t\t\t\t<input type="text" id="form-field-icon-2" />\n' +
+                // '\t\t\t\t\t<i class="icon-leaf green"></i>\n' +
+                // '\t\t\t\t</span>\n' +
+                // '\t\t\t</div>\n' +
+                // '\t\t</div>\n' +
+                // '\n' +
                 '\t\t<div class="space-4"></div>\n' +
                 '\n' +
                 '\t\t\t<div class="col-md-offset-3 col-md-9">\n' +
-                '\t\t\t\t<button class="btn btn-info" type="" onclick="sub()">\n' +
+                '\t\t\t\t<button class="btn btn-info btn-sm" type="" onclick="sub()">\n' +
                 '\t\t\t\t\t<i class="icon-ok bigger-110"></i>\n' +
                 '\t\t\t\t\t提交\n' +
                 '\t\t\t\t</button>\n' +
                 '\n' +
-                '\t\t\t\t&nbsp; &nbsp; &nbsp;\n' +
-                '\t\t\t\t<button class="btn" type="reset">\n' +
+                '\t\t\t\t&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;\n' +
+                '\t\t\t\t<button class="btn btn-sm" type="reset">\n' +
                 '\t\t\t\t\t<i class="icon-undo bigger-110"></i>\n' +
                 '\t\t\t\t\t取消\n' +
                 '\t\t\t\t</button>\n' +
@@ -179,7 +258,7 @@ function addsynctab() {
     });
 }
 
-
+//初始表格
 function inittable(data) {
     $.ajax({
         url:'/page/allpage',
@@ -202,7 +281,7 @@ function inittable(data) {
                 html += "<tr>\n" +
                     "<td class=\"center\">\n" +
                     "\t<label>\n" +
-                    "\t\t<input type=\"checkbox\" class=\"ace\" name=\"items\" />\n" +
+                    "\t\t<input type=\"checkbox\" class=\"ace\" name=\"items\" id='"+data.result[i].id +"' />\n" +
                     "\t\t<span class=\"lbl\"></span>\n" +
                     "\t</label>\n" +
                     "</td>\n" +
@@ -213,7 +292,7 @@ function inittable(data) {
                     "<td class=\"hidden-480\" id='st"+data.result[i].id+"'>" + syncstate + "</td>" +
                     "<td>\n" +
                     "<div class=\"visible-md visible-lg hidden-sm hidden-xs btn-group\">\n" +
-                    "<button class=\"btn btn-danger btn-xs\" style=\"width:28px\">\n" +
+                    "<button class=\"btn btn-danger btn-xs\" style=\"width:28px\"  onclick=\"deletetab("+data.result[i].id+")\">\n" +
                     "<i class=\"icon-trash bigger-50\"></i>\n" +
                     "</button>"+
                     "<button class=\"btn btn-xs btn-success\" onclick=\"clickbutton("+data.result[i].id+",'"+data.result[i].syncTabName+"')\">\n" +
@@ -240,7 +319,7 @@ function inittable(data) {
                              +"<a href='#' onclick='searchpage("+data.totalpages+")'> "+"最后一页"+"</a>\n"
                      +"</td>\n"
                      +"<td style='border-color: white;background: white'>\n"
-                     +"转到第："+"<input type='text' name='page' style='width: 30px;height: 20px' id='num'>"+"&nbsp;页&nbsp;&nbsp;"+"<input type='button' onclick='jumppage()'value='GO' name='cndok'>\n"
+                     +"到第："+"<input type='text' name='page' style='width: 35px;height: 25px' id='num'>"+"&nbsp;&nbsp;&nbsp;页&nbsp;&nbsp;&nbsp;"+"<input type='button' onclick='jumppage()'value='跳转' name='cndok'>\n"
                      +"</td>\n"
                     +"</tr>"
 
@@ -248,12 +327,79 @@ function inittable(data) {
         }
     });
 }
-
+//分页
 function searchpage(data){
     inittable(data);
 }
-
+//分页跳转
 function jumppage(){
     var num = $('#num').val();
     inittable(num);
+}
+
+//删除同步表记录
+function deletetab(id) {
+    layer.confirm('确认删除同步表吗？', {
+        btn: ['删除','取消'] //按钮
+    }, function(){
+        $.ajax({
+            url:'/list/delettab',
+            type:'post',
+            data:{id:id},
+            success:function (data) {
+                if (data == 'success'){
+                    layer.msg("删除成功", {
+                        skin: 'layui-layer-molv' //样式类名
+                        ,closeBtn: 0
+                    }, function(){
+                        location.reload();
+                    });
+                }else {
+                    layer.msg("删除失败，请联系管理员！");
+                }
+            }
+        });
+    });
+}
+
+//多选删除
+function deleteCheckedtab() {
+    var flag = false;
+    var checkElements=document.getElementsByName('items');
+    var ids = new Array();
+        for (var i=0;i<checkElements.length;i++){
+            //获取打勾的id
+            var checkElement=checkElements[i];
+            if(checkElement.checked){
+                var id = checkElement.id;
+                ids.push(id);
+                flag = true;
+            }
+        }
+    if (!flag){
+        layer.msg("请先选择要删除的表！");
+    }else{
+        layer.confirm('确认删除同步表吗？', {
+            btn: ['删除','取消'] //按钮
+        }, function() {
+            $.ajax({
+                url: '/list/deletselecttab',
+                type: 'post',
+                data: {"ids": ids},
+                traditional: true,
+                success: function (data) {
+                    if (data == 'success') {
+                        layer.msg("删除成功", {
+                            skin: 'layui-layer-molv' //样式类名
+                            , closeBtn: 0
+                        }, function () {
+                            location.reload();
+                        });
+                    } else {
+                        layer.msg("删除失败，请联系管理员！");
+                    }
+                }
+            });
+        })
+    }
 }
