@@ -13,8 +13,8 @@ function sub() {
         success:function (data) {
             if (data == 'success'){
                 window.location.reload();
-            }
-            alert('提交失败');
+            }else
+            {alert('提交失败');}
         }
     });
 }
@@ -208,7 +208,7 @@ function inittable(data) {
                     "<button class=\"btn btn-danger btn-xs\" style=\"width:28px\">\n" +
                     "<i class=\"icon-trash bigger-50\"></i>\n" +
                     "</button>"+
-                    "<button class=\"btn btn-xs btn-success\" onclick=\"clickbutton("+data.result[i].id+")\">\n" +
+                    "<button class=\"btn btn-xs btn-success\" onclick=\"clickbutton("+data.result[i].id+",'"+data.result[i].syncTabName+"')\">\n" +
                     "<i class=\"icon-ok bigger-120\"></i>\n" +
                     "</button>\n" +
                     "<div class=\"col-xs-9\">\n" +
