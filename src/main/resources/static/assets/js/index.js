@@ -225,10 +225,12 @@ function addsynctab() {
 
 //初始表格
 function inittable(data) {
+    var tabname;
+    tabname = $("#searchtabname").val().trim();
     $.ajax({
         url:'/page/allpage',
         type:'POST',
-        data:{page:data},
+        data:{'page':data,'tabname':tabname},
         success:function (data) {
             console.log(data);
             var html = '';
@@ -243,6 +245,7 @@ function inittable(data) {
                 if (data.result[i].lastSyncState == "未同步"){
                     syncstate = "<span class='label label-sm label-inverse arrowed-in'>未同步</span>";
                 }
+
                 html += "<tr>\n" +
                     "<td class=\"center\">\n" +
                     "\t<label>\n" +
@@ -251,7 +254,7 @@ function inittable(data) {
                     "\t</label>\n" +
                     "</td>\n" +
                     "<td>" + data.result[i].syncTabName + "</td>" +
-                    "<td>" + data.result[i].lastSyncDate+ "</td>" +
+                    "<td>" + data.result[i].lastSyncDate.substring(0, 10)+ "</td>" +
                     "<td>" + data.result[i].syncRateH + "小时/次</td>" +
                     "<td>0</td>" +
                     "<td class=\"hidden-480\">" + syncstate + "</td>" +
@@ -367,4 +370,8 @@ function deleteCheckedtab() {
             });
         })
     }
+}
+
+function searchtab() {
+    
 }
