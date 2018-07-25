@@ -39,7 +39,7 @@ public class PageController {
     protected JdbcTemplate jdbcTemplate2;
 
     @PostMapping("/allpage")
-    public Map page(String page){
+    public Map page(String page,String tabname){
         int pages = 0;      //待显示页面
         int count = 0;      //总条数
         int totalpages = 0; //总页数
@@ -64,7 +64,13 @@ public class PageController {
             pages = totalpages;
         }
         StringBuffer sql = new StringBuffer();
-        sql.append("select * from sync order by id limit ");
+        sql.append("select * from sync where 1=1 ");
+        if (null!=tabname && !"".equals(tabname)){
+            sql.append(" and sync_tab_name like '%");
+            sql.append(tabname.toString());
+            sql.append("%'");
+        }
+        sql.append(" order by id limit ");
         sql.append((pages-1)*limit);
         sql.append(" , ");
         sql.append(limit);
@@ -79,4 +85,5 @@ public class PageController {
         resultmap.put("count",count);
         return resultmap;
     }
+
 }

@@ -111,6 +111,20 @@ public class ListController {
         return result;
     }
 
+    /**
+     * 通过表名查找条数（判断表名是否存在）
+     * @param tabname
+     * @return
+     */
+    @PostMapping("/exitbytabname")
+    public String exitTabBytabname(String tabname){
+        String result = "fail";
+        if (null != syncRepository.findBySyncTabName(tabname)){
+            result = "success";
+        }
+        return result;
+    }
+
     @PostMapping("/synctab")
     public String synctab(String tabname){
         if(SyncThread.jdt==0||SyncThread.jdt==100){

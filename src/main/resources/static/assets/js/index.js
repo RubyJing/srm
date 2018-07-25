@@ -9,8 +9,8 @@ function reset() {
 }
 //提交表单
 function sub() {
-    var selectvalue =$('#table-select').val();
-    var timevalue =$('#form-input-readonly').val();
+    var selectvalue =$('#table-select').val().trim();
+    var timevalue =$('#form-input-readonly').val().trim();
     if(selectvalue == "" ||timevalue == "") {
         if (selectvalue == ""){
             layer.tips('请先选择同步表！', '#table-select');
@@ -22,19 +22,31 @@ function sub() {
         }
     }else {
         $.ajax({
-            url:'/list/addsynctab',
+            url:'/list/exitbytabname',
             type:'POST',
-            data:$('#form-sync').serialize(),
-            async:false,
+            data:{tabname:selectvalue},
             success:function (data) {
                 if (data == 'success'){
-                    layer.msg("新增同步表成功！");
-                    window.location.reload();
+                    layer.msg("同步表已存在，不能重复添加！");
+                    return;
                 }else {
-                    layer.msg("新增失败，请联系管理员！");
+                    $.ajax({
+                        url:'/list/addsynctab',
+                        type:'POST',
+                        data:$('#form-sync').serialize(),
+                        async:false,
+                        success:function (data) {
+                            if (data == 'success'){
+                                layer.msg("新增同步表成功！");
+                                window.location.reload();
+                            }else {
+                                layer.msg("新增失败，请联系管理员！");
+                            }
+                        }
+                    });
                 }
             }
-        });
+        })
     }
 }
 
@@ -225,10 +237,12 @@ function addsynctab() {
 
 //初始表格
 function inittable(data) {
+    var tabname;
+    tabname = $("#searchtabname").val().trim();
     $.ajax({
         url:'/page/allpage',
         type:'POST',
-        data:{page:data},
+        data:{'page':data,'tabname':tabname},
         success:function (data) {
             console.log(data);
             var html = '';
@@ -243,6 +257,7 @@ function inittable(data) {
                 if (data.result[i].lastSyncState == "未同步"){
                     syncstate = "<span class='label label-sm label-inverse arrowed-in'>未同步</span>";
                 }
+
                 html += "<tr>\n" +
                     "<td class=\"center\">\n" +
                     "\t<label>\n" +
@@ -251,7 +266,7 @@ function inittable(data) {
                     "\t</label>\n" +
                     "</td>\n" +
                     "<td>" + data.result[i].syncTabName + "</td>" +
-                    "<td>" + data.result[i].lastSyncDate+ "</td>" +
+                    "<td>" + data.result[i].lastSyncDate.substring(0, 10)+ "</td>" +
                     "<td>" + data.result[i].syncRateH + "小时/次</td>" +
                     "<td>0</td>" +
                     "<td class=\"hidden-480\">" + syncstate + "</td>" +
@@ -260,7 +275,7 @@ function inittable(data) {
                     "<button class=\"btn btn-danger btn-xs\" style=\"width:28px\"  onclick=\"deletetab("+data.result[i].id+")\">\n" +
                     "<i class=\"icon-trash bigger-50\"></i>\n" +
                     "</button>"+
-                    "<button class=\"btn btn-xs btn-success\" onclick=\"clickbutton("+data.result[i].id+")\">\n" +
+                    "<button class=\"btn btn-xs btn-success\" onclick=\"clickbutton("+data.result[i].id+",'"+data.result[i].syncTabName+"')\">\n" +
                     "<i class=\"icon-ok bigger-120\"></i>\n" +
                     "</button>\n" +
                     "<div class=\"col-xs-9\">\n" +
@@ -367,4 +382,8 @@ function deleteCheckedtab() {
             });
         })
     }
+}
+
+function searchtab() {
+    
 }
