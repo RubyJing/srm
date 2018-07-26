@@ -105,6 +105,7 @@ public class ListController {
         String result = "fail";
         sb.setLastSyncDate(new Timestamp(new Date().getTime()));
         sb.setLastSyncState("未同步");
+        sb.setDataIndex(0);
         if (null != syncRepository.save(sb)){
             result = "success";
         }
@@ -125,10 +126,24 @@ public class ListController {
         return result;
     }
 
+    /**
+     * @Auther: Eiden J.P Zhou
+     * @Date: 2018/7/25 16:04
+     * @Method: synctab
+     * @Params: [tabname]
+     * @Return: java.lang.String
+     * @Description: 同步一张表
+     */
     @PostMapping("/synctab")
     public String synctab(String tabname){
-        if(SyncThread.jdt==0||SyncThread.jdt==100){
-            SyncThread syncThread = new SyncThread(tabname,jdbcTemplate1,jdbcTemplate2,entityManager);
+        //判断是不是第一次进来 如果不是，那么判断是不是已经在同步了，是的话就返回
+        if (SyncThread.jdt.get(tabname)!=null && SyncThread.jdt.get(tabname)!=100){
+            return "exist";
+        }
+        int index = syncRepository.findBySyncTabName(tabname).getDataIndex();
+        //判断是否三空，和上次同步是否完成 ，是就开始同步
+        if(SyncThread.jdt==null||SyncThread.jdt.size()==0||SyncThread.jdt.get(tabname)==null||SyncThread.jdt.get(tabname)==100){
+            SyncThread syncThread = new SyncThread(tabname,index,jdbcTemplate1,jdbcTemplate2,entityManager);
             syncThread.start();
         }
         else {
@@ -138,8 +153,8 @@ public class ListController {
     }
 
     @GetMapping("/jdt")
-    public String jdt(){
-        return SyncThread.jdt.toString();
+    public String jdt(String tabname){
+        return SyncThread.jdt.get(tabname).toString();
     }
 
     /**

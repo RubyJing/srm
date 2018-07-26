@@ -52,22 +52,28 @@ function sub() {
 
 //同步
 function clickbutton(id,synctabname) {
+    var jdt = 'jdt'+id;
+    var jdtz = '#jdtz'+id;
     $.ajax({
         url:'/list/synctab',
         type:'POST',
         data:{tabname:synctabname},
         async:false,
         success:function (data) {
-            console.log("Sync ing.....");
+            if(data == "exist"){
+                layer.tips('同步进行中', jdtz,{tips: 3});
+            }
+            if(data == "success"){
+                layer.tips('同步进行中', jdtz,{tips: 3});
+            }
         }
     });
-    var jdt = 'jdt'+id;
-    var jdtz = '#jdtz'+id;
      // $(".progress-bar").attr("style","width:0%");
      var go = setInterval(function() {
          $.ajax({
              url:'/list/jdt',
              type:'GET',
+             data:{"tabname":synctabname},
              success:function (data) {
                  var persent = data+"%";
                  document.getElementById(jdt).style.width = persent;
