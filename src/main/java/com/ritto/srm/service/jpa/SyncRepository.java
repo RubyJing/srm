@@ -18,4 +18,5 @@ public interface SyncRepository extends JpaRepository<SyncBean,Integer> {
     public long count();
 
     public SyncBean findBySyncTabName(String tabname);
+
 }
