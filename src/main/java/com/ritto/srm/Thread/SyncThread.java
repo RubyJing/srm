@@ -80,8 +80,6 @@ public class SyncThread extends Thread{
         sql.append("UPDATE sync SET last_sync_state ='已同步' WHERE sync_tab_name = '");
         sql.append(tabname);
         sql.append("'");
-        sql.append(" AND data_index = ");
-        sql.append(count);
         if (jdbcTemplate1.update(sql.toString())>0){
             System.out.println("同步成功");
         }

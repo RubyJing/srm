@@ -4,6 +4,7 @@ package com.ritto.srm.Controller;
 import com.ritto.srm.Entity.CpuBean;
 import com.ritto.srm.Entity.SyncBean;
 import com.ritto.srm.Entity2.CpuBeanBack;
+import com.ritto.srm.Thread.AutoSyncThread;
 import com.ritto.srm.Thread.SyncThread;
 import com.ritto.srm.Util.ObjectConvertor;
 import com.ritto.srm.service.jpa.SyncRepository;
@@ -55,6 +56,8 @@ public class ListController {
 
     private ObjectConvertor convertor;
 
+    public AutoSyncThread autoSyncThread;
+
     @GetMapping("/dothis")
     public String dothis(){
         convertor = new ObjectConvertor();
@@ -79,7 +82,6 @@ public class ListController {
      */
     @PostMapping("/findallsync")
     public List<SyncBean> findallsync(){
-
         List<SyncBean> syncBeanList = syncRepository.findAll();
         return syncBeanList;
     }
@@ -107,6 +109,12 @@ public class ListController {
         sb.setLastSyncState("未同步");
         sb.setDataIndex(0);
         if (null != syncRepository.save(sb)){
+            List<SyncBean> beanList = syncRepository.findAll();
+            if (autoSyncThread != null){
+                autoSyncThread.exit = true;
+            }
+            autoSyncThread = new AutoSyncThread(beanList,jdbcTemplate1,jdbcTemplate2,entityManager);
+            autoSyncThread.start();
             result = "success";
         }
         return result;
